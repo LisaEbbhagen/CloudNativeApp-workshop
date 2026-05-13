@@ -1,0 +1,58 @@
+name: .NET CI/CD Pipeline
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  AZURE_CONTAINER_REGISTRY: "acrinventoryapp"
+  CONTAINER_APP_NAME: "ca-inventory-api"
+  RESOURCE_GROUP: "rg-cloudnative-dev"
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build project
+      run: dotnet build --no-restore --configuration Release
+    - name: Run automated tests
+      run: dotnet test --no-build --verbosity normal --configuration Release
+
+  build-and-deploy:
+    needs: build-and-test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Log in to Azure Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v6
+      with:
+        push: true
+        tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_APP_NAME }}:${{ github.sha }}
+        file: Dockerfile
+    - name: Azure Login
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Deploy to Azure Container Apps
+      uses: azure/container-apps-deploy-action@v1
+      with:
+        imageToDeploy: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_APP_NAME }}:${{ github.sha }}
+        resourceGroup: ${{ env.RESOURCE_GROUP }}
+        containerAppName: ${{ env.CONTAINER_APP_NAME }}
