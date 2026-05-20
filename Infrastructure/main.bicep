@@ -1,36 +1,33 @@
 param location string = resourceGroup().location
-param environmentName string = 'cae-inventory-dev-lisa'
-param appName string = 'ca-cloudnativeapp-api'
+param environmentName string = 'cae-xxx-dev-lisa'
+param appName string = 'ca-xxx-api'
 param acrName string = 'acrstudent${uniqueString(resourceGroup().id)}'
 
 // RESURS 1: Log Analytics Workspace
-// resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
-//   name: 'law-student-logs'
-//   location: location
-//   properties: {
-//     sku: {
-//       name: 'PerGB2018' // Standard för Azure for Students
-//     }
-//     retentionInDays: 30
-//   }
-// }
+resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
+  name: 'law-student-logs'
+  location: location
+  properties: {
+    sku: {
+      name: 'PerGB2018' // Standard för Azure for Students
+    }
+    retentionInDays: 30
+  }
+}
 
 // RESURS 2: Azure Container Apps Environment
-resource containerAppEnv 'Microsoft.App/managedEnvironments@2023-05-01' existing = {
   name: environmentName
-  scope: resourceGroup('rg-LisaE-dev') // Eftersom vi redan har skapat miljön i ett tidigare steg, refererar vi till den som en "existing resource".
-  //name: environmentName
-  // location: location
-  // properties: {
-  //   zoneRedundant: false // Mycket viktigt för Azure for Students
-  //   appLogsConfiguration: {
-  //     destination: 'log-analytics'
-  //     logAnalyticsConfiguration: {
-  //       customerId: logAnalytics.properties.customerId
-  //       sharedKey: logAnalytics.listKeys().primarySharedKey
-  //     }
-  //   }
-  // }
+  location: location
+  properties: {
+    zoneRedundant: false // Mycket viktigt för Azure for Students
+    appLogsConfiguration: {
+      destination: 'log-analytics'
+      logAnalyticsConfiguration: {
+        customerId: logAnalytics.properties.customerId
+        sharedKey: logAnalytics.listKeys().primarySharedKey
+      }
+    }
+  }
 }
 
 // RESURS 3: Azure Container Registry (ACR)
