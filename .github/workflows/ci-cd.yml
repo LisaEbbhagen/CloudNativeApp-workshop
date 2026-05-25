@@ -1,14 +1,14 @@
 name: .NET CI/CD Pipeline
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "master" ]
 
 env:
-  AZURE_CONTAINER_REGISTRY: "acrinventoryapp"
-  CONTAINER_APP_NAME: "ca-inventory-api"
-  RESOURCE_GROUP: "rg-cloudnative-dev"
+  AZURE_CONTAINER_REGISTRY: "acrstudentirlrttzmh2fnk"
+  CONTAINER_APP_NAME: "ca-cloudnative-api"
+  RESOURCE_GROUP: "rg-bicep-lisa-ger"
 
 jobs:
   build-and-test:
