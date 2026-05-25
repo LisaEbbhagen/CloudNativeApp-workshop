@@ -43,9 +43,11 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v6
       with:
+        context: ./CloudNativeApp.Api
+        # 2. Peka ut exakt var din Dockerfile ligger
+        file: ./CloudNativeApp.Api/Dockerfile
         push: true
         tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_APP_NAME }}:${{ github.sha }}
-        file: Dockerfile
     - name: Azure Login
       uses: azure/login@v2
       with:
