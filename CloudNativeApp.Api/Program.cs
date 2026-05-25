@@ -10,6 +10,17 @@ builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("StrictSecurityPolicy", policyBuilder =>
+    {
+        policyBuilder
+            .WithOrigins("https://min-sakra-frondend-app.azurewebsites.net") // Ersätt med din faktiska tillåtna ursprung
+            .WithMethods("GET", "POST") // Endast tillåtna HTTP-metoder, principen om att begränsa till det som behövs
+            .AllowAnyHeader(); //alternativt för ännu striktare .WithHeaders("Content-Type", "Authorization") för att specificera vilka headers som är tillåtna
+    });
+});
+
 var keyVaultUrl = builder.Configuration["KeyVaultUrl"];
 
 if (!string.IsNullOrEmpty(keyVaultUrl))
@@ -27,6 +38,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("StrictSecurityPolicy");
 
 app.UseAuthorization();
 
