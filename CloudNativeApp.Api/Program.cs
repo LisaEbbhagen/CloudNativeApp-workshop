@@ -1,6 +1,10 @@
 using Azure.Identity;
+using Azure.Monitor.OpenTelemetry.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Aktiverar OpenTelemetry och skickar data automatiskt till Azure Monitor / Application Insights
+builder.Services.AddOpenTelemetry().UseAzureMonitor();
 
 builder.Services.AddControllers();
 
