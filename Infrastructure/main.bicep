@@ -61,6 +61,14 @@ resource containerApp 'Microsoft.App/containerApps@2023-05-01' = {
         // Eftersom vi kör .NET 9 Rootless Containers lyssnar de automatiskt på 8080 (icke-privilegierad port), inte 80.
         targetPort: 8080
         allowInsecure: false // Tvingar HTTPS 
+        corsPolicy: {
+            allowOrigins: [
+                '*'] // För utveckling, tillåt alla origins. I produktion bör detta begränsas.
+                allowMethods: [
+                    'GET'
+                    'POST'
+                ]         allowHeaders: [
+                    '*'] // För utveckling, tillåt alla headers. I produktion bör detta begränsas.
       }
     }
     template: {
