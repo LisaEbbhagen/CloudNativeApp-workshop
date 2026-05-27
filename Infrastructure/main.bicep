@@ -1,11 +1,11 @@
 param location string = resourceGroup().location
-param environmentName string = 'cae-cloudnative-dev-lisa'
+param environmentName string = 'cae-cloudnative-env'
 param appName string = 'ca-cloudnative-api'
-param acrName string = 'acrstudent${uniqueString(resourceGroup().id)}'
+param acrName string = 'acrcloudnative${uniqueString(resourceGroup().id)}'
 
 // RESURS 1: Log Analytics Workspace
 resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
-  name: 'law-student-logs'
+  name: 'law-cloudnative-logs'
   location: location
   properties: {
     sku: {

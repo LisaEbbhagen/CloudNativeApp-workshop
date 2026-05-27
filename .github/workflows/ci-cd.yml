@@ -6,9 +6,9 @@ on:
     branches: [ "master" ]
 
 env:
-  AZURE_CONTAINER_REGISTRY: "acrstudentirlrttzmh2fnk"
+  AZURE_CONTAINER_REGISTRY: "acrcloudnativelp7ve3rgkvg7k"
   CONTAINER_APP_NAME: "ca-cloudnative-api"
-  RESOURCE_GROUP: "rg-bicep-lisa-ger"
+  RESOURCE_GROUP: "rg-cloudnative-dev"
 
 jobs:
   build-and-test:
