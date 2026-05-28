@@ -37,14 +37,14 @@ builder.Services.AddCors(options =>
     });
     });
 
-var keyVaultUrl = builder.Configuration["KeyVaultUrl"];
+////var keyVaultUrl = builder.Configuration["KeyVaultUrl"];
 
-if (!string.IsNullOrEmpty(keyVaultUrl))
-{
-    builder.Configuration.AddAzureKeyVault(
-        new Uri(keyVaultUrl), 
-        new DefaultAzureCredential());
-}
+////if (!string.IsNullOrEmpty(keyVaultUrl))
+//{
+//    builder.Configuration.AddAzureKeyVault(
+//        new Uri(keyVaultUrl), 
+//        new DefaultAzureCredential());
+//}
 builder.WebHost.ConfigureKestrel(options =>
 {
     options.ListenAnyIP(8080);
