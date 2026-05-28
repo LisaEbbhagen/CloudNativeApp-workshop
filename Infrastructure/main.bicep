@@ -89,15 +89,11 @@ resource containerApp 'Microsoft.App/containerApps@2023-05-01' = {
       containers: [
         {
           name: appName
-          image: 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
+          image: '${acrName}.azurecr.io/cloudnativeapi:latest'
           env: [
             {
               name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
               value: appInsights.properties.ConnectionString
-            }
-            {
-              name: 'ASPNETCORE_URLS'
-              value: 'http://+:8080'
             }
           ]
           resources: {
