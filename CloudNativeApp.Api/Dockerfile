@@ -10,7 +10,7 @@ RUN dotnet restore "./CloudNativeApp.Api.csproj"
 COPY . .
 RUN dotnet publish "CloudNativeApp.Api.csproj" -c Release -o /app/publish
 
-# STAGE 2: RUNTIME (Produktionsmiljön)
+# STAGE 2: RUNTIME (Produktionsmi..ljön)
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
 
