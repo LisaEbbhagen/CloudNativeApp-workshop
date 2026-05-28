@@ -63,11 +63,11 @@ resource containerApp 'Microsoft.App/containerApps@2023-05-01' = {
       secrets: [
         {
           name: 'registry-password'
-          value: acr.listCredentials().passwords[0].value
+          //value: acr.listCredentials().passwords[0].value
         }
       ]
       ingress: {
-        external: false // Intern åtkomst inom VNet
+        external: true
         targetPort: 8080
         allowInsecure: false // Tvingar HTTPS 
         corsPolicy: {
@@ -94,6 +94,10 @@ resource containerApp 'Microsoft.App/containerApps@2023-05-01' = {
             {
               name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
               value: appInsights.properties.ConnectionString
+            }
+            {
+              name: 'ASPNETCORE_URLS'
+              value: 'http://+:8080'
             }
           ]
           resources: {
