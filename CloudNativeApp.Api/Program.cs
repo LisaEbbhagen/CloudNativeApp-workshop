@@ -45,7 +45,10 @@ if (!string.IsNullOrEmpty(keyVaultUrl))
         new Uri(keyVaultUrl), 
         new DefaultAzureCredential());
 }
-
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(8080);
+});
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
